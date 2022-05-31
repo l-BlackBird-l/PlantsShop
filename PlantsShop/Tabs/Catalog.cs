@@ -108,13 +108,13 @@ namespace PlantsShop.Tabs
             }
             if (sorting.SelectedIndex == 1)
             {
-                var Sort = Flowers.Controls.OfType<Flower>().OrderBy(x => x.price.Text).ToList();
+                var Sort = Flowers.Controls.OfType<Flower>().OrderBy(x => x.PPrice).ToList();
                 Flowers.Controls.Clear();
                 LoadSorting(Sort);
             }
             if(sorting.SelectedIndex == 2)
             {
-                var Sort = Flowers.Controls.OfType<Flower>().OrderBy(x => x.price.Text).ToList();
+                var Sort = Flowers.Controls.OfType<Flower>().OrderBy(x => x.PPrice).ToList();
                 Sort.Reverse();
                 Flowers.Controls.Clear();
                 LoadSorting(Sort);

@@ -18,9 +18,15 @@ namespace PlantsShopAdmin.Tabs
             openFileDialog1.Filter = ".PNG (*.png)|*.png";
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                Picture.Image = Image.FromFile(openFileDialog1.FileName);
+                Picture.Image = Image.FromStream(GetImageFromPicPath(openFileDialog1.FileName));
                 Pic = openFileDialog1.FileName;
             }
+        }
+
+        public static Stream GetImageFromPicPath(string path)
+        {
+            System.IO.FileStream f = new System.IO.FileStream(path, FileMode.Open, FileAccess.Read);
+            return f;
         }
 
         private void panel2_Click(object sender, EventArgs e)

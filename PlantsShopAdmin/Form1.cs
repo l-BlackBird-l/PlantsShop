@@ -24,8 +24,8 @@ namespace PlantsShopAdmin
 
             Program.autor = autorization;
             Program.catalog = catalog;
-            Program.Aut = true;
             Program.Orders = order;
+
             Tab.Controls.Add(autorization);
 
             Tab.Controls.Add(catalog);
@@ -46,27 +46,32 @@ namespace PlantsShopAdmin
             List<Tabs.Flower> flower = server.LoadFlower();
 
             int blockY = 0;
-            int blockSizeX = flower[0].Width + 35;
-            int blockSizeY = flower[0].Height + 20;
-
-            for (int i = 0; i < flower.Count; i++)
+            int blockSizeX = 0;
+            int blockSizeY = 0;
+            if (flower.Count > 0)
             {
-                if (i % 2 != 0)
-                {
-                    flower[i].Left = blockSizeX;
-                    flower[i].Top = blockSizeY * blockY;
-                }
-                else
-                {
-                    if (i >= 1) blockY++;
-                    flower[i].Top = blockSizeY * blockY;
-                }
 
+                blockSizeX = flower[0].Width + 35;
+                blockSizeY = flower[0].Height + 20;
             }
+                for (int i = 0; i < flower.Count; i++)
+                {
+                    if (i % 2 != 0)
+                    {
+                        flower[i].Left = blockSizeX;
+                        flower[i].Top = blockSizeY * blockY;
+                    }
+                    else
+                    {
+                        if (i >= 1) blockY++;
+                        flower[i].Top = blockSizeY * blockY;
+                    }
 
-            flower = flower.OrderBy(x => x.FlowerName.Text).ToList();
-            LoadSorting(flower);
+                }
 
+                flower = flower.OrderBy(x => x.FlowerName.Text).ToList();
+                LoadSorting(flower);
+            
         }
 
         public void LoadSorting(List<Tabs.Flower> flower)

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -167,13 +168,18 @@ namespace PlantsShop
             {
                 int ID = obj.FlowerID;
 
-                string query = "SELECT Name, Picture FROM catalog WHERE ID = '" + ID + "'";
+                string query = "SELECT Name FROM catalog WHERE ID = '" + ID + "'";
                 MySqlCommand cmd = new MySqlCommand(query, cn);
                 MySqlDataReader reader1 = cmd.ExecuteReader();
                 while (reader1.Read())
                 {
                     obj.FlowerName.Text = reader1.GetString(0);
-                    obj.Picture.Image = Image.FromFile(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Flowers\\" + obj.FlowerName.Text + ".png");
+                   
+                    
+                    using (Stream stream = File.OpenRead(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Flowers\\" + obj.FlowerName.Text + ".png"))
+                    {
+                        obj.Picture.Image = System.Drawing.Image.FromStream(stream);
+                    }
                 }
                 reader1.Close();
             }
@@ -251,7 +257,7 @@ namespace PlantsShop
         {
             List<int> ID = new List<int>();
             
-            string query = "SELECT FlowerID FROM `ticket` ORDER BY Count DESC LIMIT 2";
+            string query = "SELECT  FlowerID as Count From ticket group by FlowerID order by Count DESC limit 2";
             MySqlCommand cmd = new MySqlCommand(query, cn);
             MySqlDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
@@ -301,16 +307,30 @@ namespace PlantsShop
 
         public void OrderFlower(int ID, int Count, int FlowerID, string UserID, string UserAdress, string UserName, string UserPhone, int Price)
         {
-            string query = "INSERT INTO ticket(UserID, UserName, UserAddress, UserNumber, FlowerID, Count, Price) VALUES  ('" + UserID + "', '" + UserName + "', '" + UserAdress + "', '" +  UserPhone + "', '"  +  FlowerID + "', '" + Count + "', '" + Price + "')";
+            string query = "INSERT INTO ticket(UserID, UserName, UserAddress, UserNumber, FlowerID, Count, Price) VALUES  ('" + UserID + "', '" + UserName + "', '" + UserAdress + "', '" + UserPhone + "', '" + FlowerID + "', '" + Count + "', '" + Price + "')";
             MySqlCommand cmd = new MySqlCommand(query, cn);
             cmd.ExecuteScalar();
 
-            query = "INSERT INTO UsersData(UserID, UserName, UserAdress, UserPhone) VALUES  ('" + UserID + "', '" + UserName + "', '" + UserAdress + "', '" + UserPhone + "')";
+
+            query = "SELECT COUNT(1) FROM UsersData WHERE UserID = '" + UserID + "'";
             cmd = new MySqlCommand(query, cn);
-            cmd.ExecuteScalar();
+            string Result = Convert.ToString(cmd.ExecuteScalar());
+            if (Result == "0")
+            {
+                query = "INSERT INTO UsersData(UserID, UserName, UserAdress, UserPhone) VALUES  ('" + UserID + "', '" + UserName + "', '" + UserAdress + "', '" + UserPhone + "')";
+                cmd = new MySqlCommand(query, cn);
+                cmd.ExecuteScalar();
+            }
+            else
+            {
+                // query = "INSERT INTO UsersData(UserID, UserName, UserAdress, UserPhone) VALUES  ('" + UserID + "', '" + UserName + "', '" + UserAdress + "', '" + UserPhone + "')";
+                query = "UPDATE UsersData set UserName = '" + UserName + "', UserAdress = '" + UserAdress + "', UserPhone = '" + UserPhone + "' Where UserID = '" + UserID + "'";
+                cmd = new MySqlCommand(query, cn);
+                cmd.ExecuteScalar();
+            }
         }
-      
-          public UsersData Data(string ID)
+
+        public UsersData Data(string ID)
         {
             UsersData data = new UsersData();
 

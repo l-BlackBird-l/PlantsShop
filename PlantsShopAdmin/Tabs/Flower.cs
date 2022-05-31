@@ -23,14 +23,7 @@ namespace PlantsShopAdmin.Tabs
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (count.Text == "В наявності")
-            {
-
-            }
-            else
-            {
-
-            }
+           
         }
 
 

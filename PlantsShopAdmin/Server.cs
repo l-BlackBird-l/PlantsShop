@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 
 namespace PlantsShopAdmin
 {
@@ -46,7 +47,11 @@ namespace PlantsShopAdmin
                 flower.price.Text = Price + " грн.";
                 flower.PPrice = Convert.ToInt32(Price);
 
-                flower.Picture.Image = Image.FromFile(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Flowers\\" + flower.FlowerName.Text + ".png");
+                using (Stream stream = File.OpenRead(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Flowers\\" + flower. FlowerName.Text + ".png"))
+                {
+                    flower.Picture.Image = System.Drawing.Image.FromStream(stream);
+                }
+
                 DateTime date = reader.GetDateTime(5);
                 DateTime dateNOW = DateTime.Now;
 
@@ -93,7 +98,10 @@ namespace PlantsShopAdmin
                 flower.price.Text = Price + " грн.";
                 flower.PPrice = Convert.ToInt32(Price);
 
-                flower.Picture.Image = Image.FromFile(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Flowers\\" + flower.FlowerName.Text + ".png");
+                using (Stream stream = File.OpenRead(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Flowers\\" + flower.FlowerName.Text + ".png"))
+                {
+                    flower.Picture.Image = System.Drawing.Image.FromStream(stream);
+                }
 
                 DateTime date = reader.GetDateTime(5);
                 DateTime dateNOW = DateTime.Now;
@@ -184,7 +192,10 @@ namespace PlantsShopAdmin
                     flower.price.Text = Price + " грн.";
                     flower.PPrice = Convert.ToInt32(Price);
 
-                    flower.Picture.Image = Image.FromFile(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Flowers\\" + flower.FlowerName.Text + ".png");
+                    using (Stream stream = File.OpenRead(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Flowers\\" + flower.FlowerName.Text + ".png"))
+                    {
+                        flower.Picture.Image = System.Drawing.Image.FromStream(stream);
+                    }
                     DateTime date = reader.GetDateTime(5);
                     DateTime dateNOW = DateTime.Now;
 
@@ -204,7 +215,7 @@ namespace PlantsShopAdmin
         {
             List<int> ID = new List<int>();
 
-            string query = "SELECT FlowerID FROM `ticket` ORDER BY Count DESC LIMIT 2";
+            string query = "SELECT  FlowerID as Count From ticket group by FlowerID order by Count DESC limit 2";
             MySqlCommand cmd = new MySqlCommand(query, cn);
             MySqlDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
@@ -258,9 +269,23 @@ namespace PlantsShopAdmin
             MySqlCommand cmd = new MySqlCommand(query, cn);
             cmd.ExecuteScalar();
 
-            query = "INSERT INTO UsersData(UserID, UserName, UserAdress, UserPhone) VALUES  ('" + UserID + "', '" + UserName + "', '" + UserAdress + "', '" + UserPhone + "')";
+
+            query = "SELECT COUNT(1) FROM UsersData WHERE UserID = '" + UserID + "')";
             cmd = new MySqlCommand(query, cn);
-            cmd.ExecuteScalar();
+            string Result = Convert.ToString(cmd.ExecuteScalar());
+            if(Result == "0")
+            {
+                query = "INSERT INTO UsersData(UserID, UserName, UserAdress, UserPhone) VALUES  ('" + UserID + "', '" + UserName + "', '" + UserAdress + "', '" + UserPhone + "')";
+                cmd = new MySqlCommand(query, cn);
+                cmd.ExecuteScalar();
+            }
+            else
+            {
+               // query = "INSERT INTO UsersData(UserID, UserName, UserAdress, UserPhone) VALUES  ('" + UserID + "', '" + UserName + "', '" + UserAdress + "', '" + UserPhone + "')";
+                query = "UPDATE UsersData set UserName = '" + UserName + "', UserAdress = '" + UserAdress + "', UserPhone = '" + UserPhone + "' Where UserID = '" + UserID + "'";
+                cmd = new MySqlCommand(query, cn);
+                cmd.ExecuteScalar();
+            }
         }
 
         List<Orders> OrderData()
@@ -313,7 +338,7 @@ namespace PlantsShopAdmin
             {
                 Tabs.User ord = new Tabs.User();
                 string UserInfo = "Ім'я: " + Info.Name + "  Адреса: " + Info.Adress + "  Номер: " + Info.Phone;
-                string FlowerInfo = "Квітка: " + GetFlowerName(Info.FlowerID) + "  Кількість: " + Info.Count + "  Ціна: " + Info.Price;
+                string FlowerInfo = "Квітка: " + GetFlowerName(Info.FlowerID) + "  Кількість: " + Info.Count + "  Ціна: " + Info.Price + "грн.";
 
                 ord.UserInfo.Text = UserInfo;
                 ord.FlowerInfo.Text = FlowerInfo;
@@ -424,7 +449,12 @@ namespace PlantsShopAdmin
                 flower.Desc = reader.GetString(2);
                 flower.Count = reader.GetInt32(3);
                 flower.Price = reader.GetInt32(4);
-                flower.Picture = Image.FromFile(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Flowers\\" + flower.Name + ".png");
+
+                using (Stream stream = File.OpenRead(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Flowers\\" + flower.Name + ".png"))
+                {
+                    flower.Picture = System.Drawing.Image.FromStream(stream);
+                }
+  
             }
             reader.Close();
 
@@ -432,9 +462,17 @@ namespace PlantsShopAdmin
             return flower;
         }
 
+
         public void DeleteFromCatalog(int ID)
         {
             string query = "DELETE FROM `catalog` WHERE `ID` = '" + ID + "'";
+            MySqlCommand cmd = new MySqlCommand(query, cn);
+            cmd.ExecuteScalar();
+        }
+
+        public void UpdateFlower(int ID, string Name, string Desc, int Count, int Price)
+        {
+           string query = "Update catalog SET Count = '" + Count + "', Name = '" + Name + "', Description = '"+ Desc + "',  Price = '" + Price +"' where ID = '" + ID + "'";
             MySqlCommand cmd = new MySqlCommand(query, cn);
             cmd.ExecuteScalar();
         }

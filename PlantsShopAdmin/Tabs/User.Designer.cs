@@ -50,17 +50,16 @@ namespace PlantsShopAdmin.Tabs
             // 
             // FlowerInfo
             // 
-            this.FlowerInfo.AutoSize = true;
-            this.FlowerInfo.Location = new System.Drawing.Point(13, 57);
+            this.FlowerInfo.Location = new System.Drawing.Point(13, 54);
             this.FlowerInfo.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.FlowerInfo.Name = "FlowerInfo";
-            this.FlowerInfo.Size = new System.Drawing.Size(59, 20);
+            this.FlowerInfo.Size = new System.Drawing.Size(491, 34);
             this.FlowerInfo.TabIndex = 1;
             this.FlowerInfo.Text = "label2";
             // 
             // Complite
             // 
-            this.Complite.Location = new System.Drawing.Point(396, 51);
+            this.Complite.Location = new System.Drawing.Point(339, 91);
             this.Complite.Name = "Complite";
             this.Complite.Size = new System.Drawing.Size(138, 33);
             this.Complite.TabIndex = 2;
@@ -72,7 +71,7 @@ namespace PlantsShopAdmin.Tabs
             // 
             this.panel1.Controls.Add(this.pictureBox2);
             this.panel1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.panel1.Location = new System.Drawing.Point(509, 7);
+            this.panel1.Location = new System.Drawing.Point(509, 99);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(25, 25);
             this.panel1.TabIndex = 6;
@@ -100,13 +99,12 @@ namespace PlantsShopAdmin.Tabs
             this.Controls.Add(this.FlowerInfo);
             this.Controls.Add(this.UserInfo);
             this.Font = new System.Drawing.Font("MS Reference Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "User";
-            this.Size = new System.Drawing.Size(544, 90);
+            this.Size = new System.Drawing.Size(544, 136);
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 

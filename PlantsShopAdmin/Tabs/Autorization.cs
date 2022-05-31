@@ -23,6 +23,10 @@ namespace PlantsShopAdmin.Tabs
                 Program.autor.Visible = false;
                 Program.catalog.Visible = true;
             }
+            else
+            {
+                MessageBox.Show("Пароль або логін введено неправильно");
+            }
         }
     }
 }

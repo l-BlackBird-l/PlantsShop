@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 
 namespace PlantsShopAdmin.Tabs
@@ -46,10 +47,19 @@ namespace PlantsShopAdmin.Tabs
             {
                 try
                 {
-                }
-                catch (Exception)
-                {
+                    Server server = new Server();
+                    File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Flowers\\" + Fname.Text + ".png");
+                    File.Copy(Pic, Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Flowers\\" + Fname.Text + ".png");
 
+             
+                    server.UpdateFlower(ID, Fname.Text, Desc.Text, Convert.ToInt32(Fcount.Text), Convert.ToInt32(Fprice.Text));
+                    MessageBox.Show("Товар змінено");
+                    panel1.Visible = false;
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Товар незмінено" + ex.Message);
                 }
             }
         }
@@ -60,10 +70,15 @@ namespace PlantsShopAdmin.Tabs
             openFileDialog1.Filter = ".PNG (*.png)|*.png";
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                Picture.Image = Image.FromFile(openFileDialog1.FileName);
+                using (Stream stream = File.OpenRead(openFileDialog1.FileName))
+                {
+                    Picture.Image = System.Drawing.Image.FromStream(stream);
+                }
                 Pic = openFileDialog1.FileName;
             }
+            openFileDialog1.Dispose();
         }
+
 
         private void panel2_Click(object sender, EventArgs e)
         {

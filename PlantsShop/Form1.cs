@@ -79,8 +79,14 @@ namespace PlantsShop
             List<Tabs.Flower> flower = server.LoadFlower();
 
             int blockY = 0;
-            int blockSizeX = flower[0].Width + 35;
-            int blockSizeY = flower[0].Height + 20;
+            int blockSizeX = 0;
+            int blockSizeY = 0;
+
+            if (flower.Count > 0)
+            {
+                blockSizeX = flower[0].Width + 35;
+                blockSizeY = flower[0].Height + 20;
+            }
 
             for (int i = 0; i < flower.Count; i++)
             {
@@ -109,8 +115,14 @@ namespace PlantsShop
             List<Tabs.Flower> flower = server.LoadFlower();
 
             int blockY = 0;
-            int blockSizeX = flower[0].Width + 35;
-            int blockSizeY = flower[0].Height + 20;
+            int blockSizeX = 0;
+            int blockSizeY = 0;
+
+            if (flower.Count > 0)
+            {
+                blockSizeX = flower[0].Width + 35;
+                blockSizeY = flower[0].Height + 20;
+            }
 
             for (int i = 0; i < flower.Count; i++)
             {
@@ -195,6 +207,8 @@ namespace PlantsShop
                 HideTabs();
                 home.Visible = true;
                 Program.LastTab = 0;
+                home.Hits.Controls.Clear();
+                AddHitsFlowers();
                 UpdateData(home.Hits);
             }
         }

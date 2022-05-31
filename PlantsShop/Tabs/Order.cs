@@ -76,7 +76,7 @@ namespace PlantsShop.Tabs
         }
 
         private void Order_Load(object sender, EventArgs e)
-        { UserCount.Maximum = Pcount; label2.Text = "Загальна ціна: " + PPrice + "грн."; TotalPrice = PPrice; UserCount.Value = 1; }
+        { UserCount.Maximum = Pcount; label2.Text = "Загальна ціна: " + PPrice + "грн."; TotalPrice = PPrice;  }
 
 
         private void UserCount_KeyUp(object sender, KeyEventArgs e)
